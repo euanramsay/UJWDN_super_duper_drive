@@ -9,6 +9,7 @@ import java.util.Base64;
 
 @Service
 public class UserService {
+
     HashService hashService;
     UserMapper userMapper;
 
@@ -26,6 +27,7 @@ public class UserService {
         if(user==null) return -1;
         else return user.getUserid();
     }
+
     public int createUser(User user){
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];

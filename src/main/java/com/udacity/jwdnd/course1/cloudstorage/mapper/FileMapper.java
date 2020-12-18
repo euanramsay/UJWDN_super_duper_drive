@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface FileMapper {
+
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
     File getFile(Integer userid);
 
