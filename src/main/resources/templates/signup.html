@@ -20,7 +20,7 @@
                     You successfully signed up! Please continue to the <a id="login-link" th:href="@{/login}">login</a> page.
                 </div>
                 <div th:if="${error}" class="alert alert-danger">
-                    <span>There was an error signing you up</span>
+                    <span th:text = "${error}"></span>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">

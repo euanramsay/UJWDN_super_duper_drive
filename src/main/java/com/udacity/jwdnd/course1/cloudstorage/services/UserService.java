@@ -24,7 +24,7 @@ public class UserService {
 
     public int findUseridByName(String username) {
         User user = userMapper.getUser(username);
-        if(user==null) return -1;
+        if (user==null) return -1;
         else return user.getUserid();
     }
 
