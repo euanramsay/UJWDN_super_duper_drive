@@ -28,7 +28,7 @@ public class UserService {
         else return user.getUserid();
     }
 
-    public int createUser(User user){
+    public int createUser(User user) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);

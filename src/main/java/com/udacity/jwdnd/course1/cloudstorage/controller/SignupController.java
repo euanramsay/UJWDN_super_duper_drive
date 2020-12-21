@@ -24,8 +24,13 @@ public class SignupController {
 
     @PostMapping("/signup")
     public String signupUser(@ModelAttribute User user, Model model) {
-        Boolean error = false;
-        userService.createUser(user);
-        return "signup";
+        if( userService.isUserNameAvailable(user.getUsername())) {
+            userService.createUser(user);
+            model.addAttribute("success", true);
+            return "signup";
+        } else {
+            model.addAttribute("error", true);
+            return "signup";
+        }
     }
 }
