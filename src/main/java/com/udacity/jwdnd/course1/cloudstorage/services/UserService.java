@@ -34,7 +34,7 @@ public class UserService {
         random.nextBytes(salt);
         String encodeSalt = Base64.getEncoder().encodeToString(salt);
         String hashedPassword = hashService.getHashedValue(user.getPassword(),encodeSalt);
-        return userMapper.insertUser(new User(null, user.getUsername(), encodeSalt,hashedPassword,user.getFirstname(),user.getLastname()));
+        return userMapper.insertUser(new User(null, user.getUsername(), encodeSalt,hashedPassword,user.getFirstName(),user.getLastname()));
     }
 
     public User getUser(String username){

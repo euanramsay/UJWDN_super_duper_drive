@@ -44,5 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll()
                 .defaultSuccessUrl("/home", true);
+        http.headers()
+                .frameOptions().disable();
     }
 }
