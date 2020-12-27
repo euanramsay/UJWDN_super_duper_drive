@@ -42,8 +42,7 @@ public class HomeController {
     }
 
     @PostMapping("/note/create")
-    public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect)
-    {
+    public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect) {
         boolean success = false;
 
         if (note.getNoteId() == null) {
@@ -64,11 +63,11 @@ public class HomeController {
     @GetMapping("/note/delete/{noteId}")
     public String deleteNote(Authentication authentication, @PathVariable Integer noteId) {
         noteService.deleteNote(noteId, getUserId(authentication));
-        return "home";
+        return "redirect:/home";
     }
 
     @PostMapping("/credential/create")
-    public String createCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirect){
+    public String createCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirect) {
         boolean success = false;
 
         if (credential.getCredentialId() == null) {
@@ -82,13 +81,13 @@ public class HomeController {
         }
 
         redirect.addAttribute("success", success);
-
         return "redirect:/result";
     }
 
     @GetMapping("/credential/delete/{credentialId}")
-    public String deleteCredential(Authentication authentication, @PathVariable int credentialId, Model model) {
-        return "home";
+    public String deleteCredential(Authentication authentication, @PathVariable Integer credentialId) {
+        credentialService.deleteCredential(credentialId, getUserId(authentication));
+        return "redirect:/home";
     }
 
     private Integer getUserId(Authentication authentication) {
