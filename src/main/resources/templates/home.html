@@ -148,9 +148,18 @@
                                         <button type="button" class="btn btn-success">Edit</button>
                                         <a class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
+                                    <th scope="row" >Example Credential URL</th>
                                     <td>Example Credential Username</td>
                                     <td>Example Credential Password</td>
+                                </tr>
+                                <tr id="credential-row" th:each="credential : ${credentials}" >
+                                    <td>
+                                        <button type="button" class="btn btn-success" th:onclick="javascript:showCredentialModal([[${credential.credentialId}]], [[${credential.url}]], [[${credential.username}]], [[${credential.password}]], [[${credential.userId}]])">Edit</button>
+                                        <a class="btn btn-danger" th:href="@{/credential/delete/{credentialId}(credentialId = ${credential.credentialId})}">Delete</a>
+                                    </td>
+                                    <th th:text="${credential.url}" scope="row"></th>
+                                    <td th:text="${credential.username}"></td>
+                                    <td th:text="${credential.password}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -166,7 +175,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form action="#" th:action="@{/credential/create}" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
@@ -204,15 +213,16 @@
             // For opening the note modal
             function showNoteModal(noteId, noteTitle, noteDescription, userId) {
                 $('#note-id').val(noteId ? noteId : '');
-                $('#user-id').val(userId ? userId : '')
+                $('#user-id').val(userId ? userId : '');
                 $('#note-title').val(noteTitle ? noteTitle : '');
                 $('#note-description').val(noteDescription ? noteDescription : '');
                 $('#noteModal').modal('show');
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
+            function showCredentialModal(credentialId, url, username, password, userId) {
                 $('#credential-id').val(credentialId ? credentialId : '');
+                $('#user-id').val(userId ? userId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');

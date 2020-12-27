@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
@@ -43,26 +44,50 @@ public class HomeController {
     @PostMapping("/note/create")
     public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect)
     {
-        boolean writeNoteSuccess = false;
+        boolean success = false;
 
         if (note.getNoteId() == null) {
             if (noteService.addNote(note, getUserId(authentication)) == 1) {
-                writeNoteSuccess = true;
+                success = true;
             }
         } else {
             if (noteService.updateNote(note, getUserId(authentication)) == 1) {
-                writeNoteSuccess = true;
+                success = true;
             }
         }
 
-        redirect.addAttribute("writeNoteSuccess", writeNoteSuccess);
+        redirect.addAttribute("success", success);
 
         return "redirect:/result";
     }
 
     @GetMapping("/note/delete/{noteId}")
-    public String deleteNote(Authentication authentication, @PathVariable Integer noteId, Model model) {
+    public String deleteNote(Authentication authentication, @PathVariable Integer noteId) {
         noteService.deleteNote(noteId, getUserId(authentication));
+        return "home";
+    }
+
+    @PostMapping("/credential/create")
+    public String createCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirect){
+        boolean success = false;
+
+        if (credential.getCredentialId() == null) {
+            if (credentialService.addCredential(credential, getUserId(authentication)) == 1) {
+                success = true;
+            }
+        } else {
+            if (credentialService.updateCredential(credential, getUserId(authentication)) == 1) {
+                success = true;
+            }
+        }
+
+        redirect.addAttribute("success", success);
+
+        return "redirect:/result";
+    }
+
+    @GetMapping("/credential/delete/{credentialId}")
+    public String deleteCredential(Authentication authentication, @PathVariable int credentialId, Model model) {
         return "home";
     }
 
