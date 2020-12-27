@@ -14,7 +14,7 @@ public class Note {
         this.userId = userId;
     }
 
-    public Integer getNoteid() {
+    public Integer getNoteId() {
         return noteId;
     }
 

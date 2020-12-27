@@ -51,7 +51,7 @@ public class HomeController {
         boolean writeNoteSuccess = false;
 
         User currentUser = userService.getUser(authentication.getName());
-        if (note.getNoteid() == null) {
+        if (note.getNoteId() == null) {
             if (noteService.addNote(note, currentUser) == 1) {
                 writeNoteSuccess = true;
             }
@@ -63,11 +63,12 @@ public class HomeController {
 
         redirect.addAttribute("writeNoteSuccess", writeNoteSuccess);
 
-        return "redirect:/results";
+        return "redirect:/result";
     }
 
     @GetMapping("/note/delete/{noteId}")
-    public String deleteNote(Authentication authentication, @PathVariable int noteId, Model model) {
+    public String deleteNote(Authentication authentication, @PathVariable Integer noteId, Model model) {
+        noteService.deleteNote(noteId);
         return "home";
     }
 }

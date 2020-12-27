@@ -38,11 +38,8 @@ public class NoteService {
         return 0;
     }
 
-    public Integer deleteNote(Integer noteId, User user) {
-        Note note = noteMapper.getNote(noteId);
-        if (note.getUserId().equals(user.getUserId())) {
-            return noteMapper.deleteNote(noteId);
-        }
-        return 0;
+    public Integer deleteNote(Integer noteId) {
+       noteMapper.deleteNote(noteId);
+       return 0;
     }
 }
