@@ -33,23 +33,28 @@ public class CredentialService {
     }
 
     public Integer addCredential(Credential credential, Integer userId){
+        encryptPassword(credential);
+        credential.setUserId(userId);
+        return credentialMapper.insertCredential(credential);
+    }
+
+    private void encryptPassword(Credential credential) {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
         random.nextBytes(key);
         credential.setKey(Base64.getEncoder().encodeToString(key));
         credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
-        credential.setUserId(userId);
-        return credentialMapper.insertCredential(credential);
     }
 
     public Integer updateCredential(Credential credential, Integer userId) {
         if (credential.getUserId().equals(userId)) {
+            encryptPassword(credential);
             return credentialMapper.updateCredential(credential);
         }
         return 0;
     }
 
-    public Integer deleteNote(Integer credentialId, Integer userId) {
+    public Integer deleteCredential(Integer credentialId, Integer userId) {
         Credential note = credentialMapper.getCredential(credentialId);
         if (note.getUserId().equals(userId)) {
             return credentialMapper.deleteCredential(credentialId);
