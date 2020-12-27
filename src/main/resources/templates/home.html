@@ -85,7 +85,7 @@
                                     </tr>
                                     <tr id="note-row" th:each="note : ${notes}" >
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
+                                            <button type="button" class="btn btn-success" th:onclick="javascript:showNoteModal([[${note.noteId}]], [[${note.noteTitle}]], [[${note.noteDescription}]], [[${note.userId}]])">Edit</button>
                                             <a class="btn btn-danger" th:href="@{/note/delete/{noteId}(noteId = ${note.noteId})}">Delete</a>
                                         </td>
                                         <th th:text="${note.noteTitle}" scope="row"></th>
@@ -105,8 +105,9 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" th:action="@{/note/create}" method="POST">
+                                        <form action="#" th:action="@{/note/create}" th:object="${note}" method="POST">
                                             <input type="hidden" name="noteId" id="note-id">
+                                            <input type="hidden" name="userId" id="user-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
                                                 <input type="text" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required>
@@ -201,8 +202,9 @@
         <!--For opening the note modal-->
         <script type="text/javascript">
             // For opening the note modal
-            function showNoteModal(noteId, noteTitle, noteDescription) {
+            function showNoteModal(noteId, noteTitle, noteDescription, userId) {
                 $('#note-id').val(noteId ? noteId : '');
+                $('#user-id').val(userId ? userId : '')
                 $('#note-title').val(noteTitle ? noteTitle : '');
                 $('#note-description').val(noteDescription ? noteDescription : '');
                 $('#noteModal').modal('show');

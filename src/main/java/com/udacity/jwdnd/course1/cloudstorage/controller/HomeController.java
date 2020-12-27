@@ -40,23 +40,17 @@ public class HomeController {
         return modelAndView;
     }
 
-    private Integer getUserId(Authentication authentication) {
-        String username = authentication.getPrincipal().toString();
-        return userService.findUseridByName(username);
-    }
-
     @PostMapping("/note/create")
     public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect)
     {
         boolean writeNoteSuccess = false;
 
-        User currentUser = userService.getUser(authentication.getName());
         if (note.getNoteId() == null) {
-            if (noteService.addNote(note, currentUser) == 1) {
+            if (noteService.addNote(note, getUserId(authentication)) == 1) {
                 writeNoteSuccess = true;
             }
         } else {
-            if (noteService.updateNote(note, currentUser) == 1) {
+            if (noteService.updateNote(note, getUserId(authentication)) == 1) {
                 writeNoteSuccess = true;
             }
         }
@@ -68,7 +62,12 @@ public class HomeController {
 
     @GetMapping("/note/delete/{noteId}")
     public String deleteNote(Authentication authentication, @PathVariable Integer noteId, Model model) {
-        noteService.deleteNote(noteId);
+        noteService.deleteNote(noteId, getUserId(authentication));
         return "home";
+    }
+
+    private Integer getUserId(Authentication authentication) {
+        String username = authentication.getPrincipal().toString();
+        return userService.findUseridByName(username);
     }
 }

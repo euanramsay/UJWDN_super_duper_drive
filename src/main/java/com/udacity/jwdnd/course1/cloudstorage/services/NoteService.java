@@ -26,20 +26,26 @@ public class NoteService {
         return noteMapper.getNote(noteId);
     }
 
-    public Integer addNote(Note note, User user) {
-        note.setUserId(user.getUserId());
+    public Integer addNote(Note note, Integer userId) {
+        System.out.println("userId " + userId);
+        System.out.println(note.getUserId());
+        note.setUserId(userId);
+        System.out.println(note.getUserId());
         return noteMapper.addNote(note);
     }
 
-    public Integer updateNote(Note note, User user) {
-        if (note.getUserId().equals(user.getUserId())) {
+    public Integer updateNote(Note note, Integer userId) {
+        if (note.getUserId().equals(userId)) {
             return noteMapper.updateNote(note);
         }
         return 0;
     }
 
-    public Integer deleteNote(Integer noteId) {
-       noteMapper.deleteNote(noteId);
-       return 0;
+    public Integer deleteNote(Integer noteId, Integer userId) {
+        Note note = noteMapper.getNote(noteId);
+        if (note.getUserId().equals(userId)) {
+            return noteMapper.deleteNote(noteId);
+        }
+        return 0;
     }
 }
