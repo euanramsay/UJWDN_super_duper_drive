@@ -1,14 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class HomeController {
@@ -40,11 +31,43 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomeView(Authentication authentication, Model model){
-        model.addAttribute("credentials",credentialService.getUserCredentials(authentication.getName()));
-        model.addAttribute("encryptionService",encryptionService);
-        model.addAttribute("files",fileService.getUserFiles(authentication.getName()));
-        model.addAttribute("notes",noteService.getUserNotes(authentication.getName()));
+    public ModelAndView getHomeView(Authentication authentication) {
+        ModelAndView modelAndView = new ModelAndView("home");
+        modelAndView.addObject("credentials", credentialService.getUserCredentials(getUserId(authentication)));
+        modelAndView.addObject("encryptionService",encryptionService);
+        modelAndView.addObject("files",fileService.getUserFiles(getUserId(authentication)));
+        modelAndView.addObject("notes",noteService.getUserNotes(getUserId(authentication)));
+        return modelAndView;
+    }
+
+    private Integer getUserId(Authentication authentication) {
+        String username = authentication.getPrincipal().toString();
+        return userService.findUseridByName(username);
+    }
+
+    @PostMapping("/note/create")
+    public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect)
+    {
+        boolean writeNoteSuccess = false;
+
+        User currentUser = userService.getUser(authentication.getName());
+        if (note.getNoteid() == null) {
+            if (noteService.addNote(note, currentUser) == 1) {
+                writeNoteSuccess = true;
+            }
+        } else {
+            if (noteService.updateNote(note, currentUser) == 1) {
+                writeNoteSuccess = true;
+            }
+        }
+
+        redirect.addAttribute("writeNoteSuccess", writeNoteSuccess);
+
+        return "redirect:/results";
+    }
+
+    @GetMapping("/note/delete/{noteId}")
+    public String deleteNote(Authentication authentication, @PathVariable int noteId, Model model) {
         return "home";
     }
 }

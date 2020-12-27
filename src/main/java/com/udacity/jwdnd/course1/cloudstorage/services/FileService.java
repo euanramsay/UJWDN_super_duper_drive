@@ -21,8 +21,8 @@ public class FileService {
         return fileMapper.getFile(fileId);
     }
 
-    public List<File> getUserFiles(String username){
-        return fileMapper.getUserFiles(userService.findUseridByName(username));
+    public List<File> getUserFiles(Integer userId){
+        return fileMapper.getUserFiles(userId);
     }
 
     public int saveFile(File file){

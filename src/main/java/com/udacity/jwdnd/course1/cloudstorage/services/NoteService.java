@@ -18,30 +18,30 @@ public class NoteService {
         this.userService = userService;
     }
 
-    public List<Note> getUserNotes(Integer userid) {
-        return noteMapper.getUserNotes(userid);
+    public List<Note> getUserNotes(Integer userId) {
+        return noteMapper.getUserNotes(userId);
     }
 
-    public Note getNote(Integer userid, int noteid) {
-        return noteMapper.getNote(noteid);
+    public Note getNote(int noteId) {
+        return noteMapper.getNote(noteId);
     }
 
-    public Integer addNote(Note note, User currentUser) {
-        note.setUserid(currentUser.getUserid());
+    public Integer addNote(Note note, User user) {
+        note.setUserId(user.getUserId());
         return noteMapper.addNote(note);
     }
 
-    public Integer updateNote(Note note, User currentUser) {
-        if (note.getUserid().equals(currentUser.getUserid()) {
-            return noteMapper.update(note);
+    public Integer updateNote(Note note, User user) {
+        if (note.getUserId().equals(user.getUserId())) {
+            return noteMapper.updateNote(note);
         }
         return 0;
     }
 
-    public Integer deleteNote(Integer noteId, User currentUser) {
+    public Integer deleteNote(Integer noteId, User user) {
         Note note = noteMapper.getNote(noteId);
-        if (note.getUserid().equals(currentUser.getUserid())) {
-            return noteMapper.delete(noteId);
+        if (note.getUserId().equals(user.getUserId())) {
+            return noteMapper.deleteNote(noteId);
         }
         return 0;
     }

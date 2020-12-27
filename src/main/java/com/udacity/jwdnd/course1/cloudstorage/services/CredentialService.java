@@ -21,12 +21,12 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
-    public List<Credential> getUserCredentials(String username){
-        return credentialMapper.getUserCredentials(userService.getUser(username).getUserid());
+    public List<Credential> getUserCredentials(Integer userId){
+        return credentialMapper.getUserCredentials(userId);
     }
 
-    public Credential getCredential(int credentialid){
-        return credentialMapper.getCredential(credentialid);
+    public Credential getCredential(int credentialId){
+        return credentialMapper.getCredential(credentialId);
     }
 
     public int insertCredential(Credential credential){

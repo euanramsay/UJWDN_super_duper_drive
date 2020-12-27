@@ -14,22 +14,22 @@ import java.util.List;
 @Mapper
 public interface NoteMapper {
 
-    @Select("SELECT * FROM NOTES WHERE note_id = #{noteid}")
-    Note getNote(Integer noteid);
+    @Select("SELECT * FROM NOTES WHERE noteId = #{noteId}")
+    Note getNote(Integer noteId);
 
-    @Select("SELECT * FROM NOTES WHERE userid = #{userid}")
-    List<Note> getUserNotes(Integer userid);
+    @Select("SELECT * FROM NOTES WHERE userId = #{userId}")
+    List<Note> getUserNotes(Integer userId);
 
-    @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) " +
-            "VALUES(#{notetitle}, #{notedescription}, #{userid})")
-    @Options(useGeneratedKeys = true, keyProperty="noteid")
+    @Insert("INSERT INTO NOTES (noteTitle, noteDescription, userId) " +
+            "VALUES(#{noteTitle}, #{noteDescription}, #{userId})")
+    @Options(useGeneratedKeys = true, keyProperty="noteId")
     Integer addNote(Note note);
 
-    @Update("UPDATE NOTES SET note_title=#{title}, note_description=#{description} " +
-            "WHERE note_id=#{noteid}")
+    @Update("UPDATE NOTES SET noteTitle=#{noteTitle}, noteDescription=#{noteDescription} " +
+            "WHERE noteId=#{noteId}")
     Integer updateNote(Note note);
 
-    @Delete("DELETE FROM NOTES WHERE note_id=#{noteid}")
-    Integer deleteNote(Integer noteid);
+    @Delete("DELETE FROM NOTES WHERE noteId=#{noteId}")
+    Integer deleteNote(Integer noteId);
 }
 

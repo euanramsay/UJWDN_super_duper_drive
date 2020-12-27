@@ -14,11 +14,11 @@ public interface FileMapper {
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
     File getFile(Integer fileId);
 
-    @Select("SELECT * FROM FILES WHERE userid = #{userid}")
-    List<File> getUserFiles(Integer userid);
+    @Select("SELECT * FROM FILES WHERE userId = #{userId}")
+    List<File> getUserFiles(Integer userId);
 
-    @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) " +
-            "VALUES(#{filename}, #{contenttype}, #{filesize}, #{userid}, #{filedata})")
+    @Insert("INSERT INTO FILES (filename, contenttype, filesize, userId, filedata) " +
+            "VALUES(#{filename}, #{contenttype}, #{filesize}, #{userId}, #{filedata})")
     @Options(useGeneratedKeys = true, keyProperty="fileId")
     int insertFile(File file);
 }

@@ -41,7 +41,6 @@ public class NoteController {
         redirect.addAttribute("writeNoteSuccess", writeNoteSuccess);
 
         return "redirect:/results";
-        return "home";
     }
 
     @GetMapping("/note/delete/{noteId}")

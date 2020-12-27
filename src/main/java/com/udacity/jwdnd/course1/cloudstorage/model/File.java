@@ -4,18 +4,18 @@ public class File {
 
     private Integer fileId;
     private String filename;
-    private String contenttype;
+    private String contentType;
     private String filesize;
-    private Integer userid;
-    private byte[] filedata;
+    private Integer userId;
+    private byte[] fileData;
 
-    public File(Integer fileId, String filename, String contenttype, String filesize, Integer userid, byte[] filedata) {
+    public File(Integer fileId, String filename, String contentType, String filesize, Integer userId, byte[] fileData) {
         this.fileId = fileId;
         this.filename = filename;
-        this.contenttype = contenttype;
+        this.contentType = contentType;
         this.filesize = filesize;
-        this.userid = userid;
-        this.filedata = filedata;
+        this.userId = userId;
+        this.fileData = fileData;
     }
 
     public Integer getFileId() {
@@ -34,12 +34,12 @@ public class File {
         this.filename = filename;
     }
 
-    public String getContenttype() {
-        return contenttype;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setContenttype(String contenttype) {
-        this.contenttype = contenttype;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getFilesize() {
@@ -51,18 +51,18 @@ public class File {
     }
 
     public Integer getUserid() {
-        return userid;
+        return userId;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUserid(Integer userId) {
+        this.userId = userId;
     }
 
-    public byte[] getFiledata() {
-        return filedata;
+    public byte[] getFileData() {
+        return fileData;
     }
 
-    public void setFiledata(byte[] filedata) {
-        this.filedata = filedata;
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
     }
 }
