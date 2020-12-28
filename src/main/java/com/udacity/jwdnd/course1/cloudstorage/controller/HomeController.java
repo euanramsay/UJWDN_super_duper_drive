@@ -48,20 +48,15 @@ public class HomeController {
 
     @PostMapping("/note/create")
     public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirect) {
-        boolean success = false;
-
         if (note.getNoteId() == null) {
             if (noteService.addNote(note, getUserId(authentication)) == 1) {
-                success = true;
+                redirect.addAttribute("success", true);
             }
         } else {
             if (noteService.updateNote(note, getUserId(authentication)) == 1) {
-                success = true;
+                redirect.addAttribute("success", true);
             }
         }
-
-        redirect.addAttribute("success", success);
-
         return "redirect:/result";
     }
 
@@ -73,19 +68,15 @@ public class HomeController {
 
     @PostMapping("/credential/create")
     public String createCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirect) {
-        boolean success = false;
-
         if (credential.getCredentialId() == null) {
             if (credentialService.addCredential(credential, getUserId(authentication)) == 1) {
-                success = true;
+                redirect.addAttribute("success", true);
             }
         } else {
             if (credentialService.updateCredential(credential, getUserId(authentication)) == 1) {
-                success = true;
+                redirect.addAttribute("success", true);
             }
         }
-
-        redirect.addAttribute("success", success);
         return "redirect:/result";
     }
 
@@ -97,27 +88,17 @@ public class HomeController {
 
     @PostMapping("/file/upload")
     public String uploadFile(Authentication authentication, @RequestParam MultipartFile fileUpload, RedirectAttributes redirect) {
-        boolean success = false;
-
         if (fileService.filenameUnique(fileUpload, getUserId(authentication))) {
             try {
                 fileService.uploadFile(fileUpload,getUserId(authentication));
-                success = true;
+                redirect.addAttribute("success", true);
             } catch (Exception e) {
                 redirect.addAttribute("fileError", String.format("Could not upload %s", fileUpload.getOriginalFilename()));
             }
         } else {
             redirect.addAttribute("fileError", String.format("Filenames must only be used once, can not use %s", fileUpload.getOriginalFilename()));
         }
-
-        redirect.addAttribute("success", success);
-        return "redirect:/home";
-    }
-
-    @GetMapping("/file/delete/{fileId}")
-    public String deleteFile(Authentication authentication, @PathVariable Integer fileId) {
-        fileService.deleteFile(fileId, getUserId(authentication));
-        return "redirect:/home";
+        return "redirect:/result";
     }
 
     @GetMapping("/file/view/{fileId}")
@@ -127,6 +108,12 @@ public class HomeController {
                 .contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", file.getFilename()))
                 .body(file.getFileData());
+    }
+
+    @GetMapping("/file/delete/{fileId}")
+    public String deleteFile(Authentication authentication, @PathVariable Integer fileId) {
+        fileService.deleteFile(fileId, getUserId(authentication));
+        return "redirect:/home";
     }
 
     private Integer getUserId(Authentication authentication) {

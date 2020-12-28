@@ -22,6 +22,6 @@ public interface FileMapper {
     @Options(useGeneratedKeys = true, keyProperty="fileId")
     Integer insertFile(File file);
 
-    @Delete("DELETE FROM NOTES WHERE noteId=#{noteId}")
-    Integer deleteFile(Integer noteId, Integer userId);
+    @Delete("DELETE FROM FILES WHERE fileId=#{fileId}")
+    Integer deleteFile(Integer fileId, Integer userId);
 }
