@@ -1,10 +1,13 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -118,8 +121,12 @@ public class HomeController {
     }
 
     @GetMapping("/file/view/{fileId}")
-    public ResponseEntity<Resource> fileView(@PathVariable Integer fileId, Model model){
-        return null;
+    public ResponseEntity<byte[]> viewFile(@PathVariable Integer fileId) {
+        File file = fileService.getFile(fileId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", file.getFilename()))
+                .body(file.getFileData());
     }
 
     private Integer getUserId(Authentication authentication) {
