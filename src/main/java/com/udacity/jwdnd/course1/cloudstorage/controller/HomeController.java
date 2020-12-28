@@ -4,15 +4,17 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -88,6 +90,36 @@ public class HomeController {
     public String deleteCredential(Authentication authentication, @PathVariable Integer credentialId) {
         credentialService.deleteCredential(credentialId, getUserId(authentication));
         return "redirect:/home";
+    }
+
+    @PostMapping("/file/upload")
+    public String uploadFile(Authentication authentication, @RequestParam MultipartFile fileUpload, RedirectAttributes redirect) {
+        boolean success = false;
+
+        if (fileService.filenameUnique(fileUpload, getUserId(authentication))) {
+            try {
+                fileService.uploadFile(fileUpload,getUserId(authentication));
+                success = true;
+            } catch (Exception e) {
+                redirect.addAttribute("fileError", String.format("Could not upload %s", fileUpload.getOriginalFilename()));
+            }
+        } else {
+            redirect.addAttribute("fileError", String.format("Filenames must only be used once, can not use %s", fileUpload.getOriginalFilename()));
+        }
+
+        redirect.addAttribute("success", success);
+        return "redirect:/home";
+    }
+
+    @GetMapping("/file/delete/{fileId}")
+    public String deleteFile(Authentication authentication, @PathVariable Integer fileId) {
+        fileService.deleteFile(fileId, getUserId(authentication));
+        return "redirect:/home";
+    }
+
+    @GetMapping("/file/view/{fileId}")
+    public ResponseEntity<Resource> fileView(@PathVariable Integer fileId, Model model){
+        return null;
     }
 
     private Integer getUserId(Authentication authentication) {

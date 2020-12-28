@@ -33,15 +33,17 @@ public class NoteService {
     public Integer updateNote(Note note, Integer userId) {
         if (note.getUserId().equals(userId)) {
             return noteMapper.updateNote(note);
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public Integer deleteNote(Integer noteId, Integer userId) {
         Note note = noteMapper.getNote(noteId);
         if (note.getUserId().equals(userId)) {
             return noteMapper.deleteNote(noteId);
+        } else {
+            return 0;
         }
-        return 0;
     }
 }

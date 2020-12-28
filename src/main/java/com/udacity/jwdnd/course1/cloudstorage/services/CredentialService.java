@@ -38,28 +38,30 @@ public class CredentialService {
         return credentialMapper.insertCredential(credential);
     }
 
-    private void encryptPassword(Credential credential) {
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[16];
-        random.nextBytes(key);
-        credential.setKey(Base64.getEncoder().encodeToString(key));
-        credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
-    }
-
     public Integer updateCredential(Credential credential, Integer userId) {
         if (credential.getUserId().equals(userId)) {
             encryptPassword(credential);
             return credentialMapper.updateCredential(credential);
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public Integer deleteCredential(Integer credentialId, Integer userId) {
         Credential note = credentialMapper.getCredential(credentialId);
         if (note.getUserId().equals(userId)) {
             return credentialMapper.deleteCredential(credentialId);
+        } else {
+            return 0;
         }
-        return 0;
+    }
+
+    private void encryptPassword(Credential credential) {
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        credential.setKey(Base64.getEncoder().encodeToString(key));
+        credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
     }
 
     public Credential decryptPassword(Credential credential){
