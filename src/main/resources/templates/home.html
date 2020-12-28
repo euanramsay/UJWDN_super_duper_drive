@@ -166,7 +166,7 @@
                                     </td>
                                     <th th:text="${credential.url}" scope="row"></th>
                                     <td th:text="${credential.username}"></td>
-                                    <td th:text="${credential.password}"></td>
+                                    <td th:text="${encryptionService.encryptValue(credential.password, credential.key)}"></td>
                                 </tr>
                                 </tbody>
                             </table>
