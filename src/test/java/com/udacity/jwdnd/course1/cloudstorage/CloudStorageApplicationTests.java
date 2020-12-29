@@ -11,8 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
@@ -147,5 +148,40 @@ class CloudStorageApplicationTests {
 
 		assertEquals(driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText(), noteTitle + additionToNoteTitle);
 		assertEquals(driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText(), noteDescription + additionToNoteDescription);
+	}
+
+	@Test
+	public void deletedNoteIsNoLongerShown() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/signup");
+
+		Signup signup = new Signup(driver);
+		signup.signupUser(firstName, lastName, username, password);
+		signup.clickLoginLink();
+
+		Login login = new Login(driver);
+		login.loginUser(username, password);
+
+		assertEquals("Home", driver.getTitle());
+
+		Home home = new Home(driver);
+		home.addNewNote(noteTitle, noteDescription);
+
+		assertEquals("Result", driver.getTitle());
+
+		Result result = new Result(driver);
+		result.continueToHomePage();
+		home.navigateToNotesTab();
+
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-row")));
+
+		assertEquals(driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText(), noteTitle);
+		assertEquals(driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText(), noteDescription);
+
+		home.deleteFirstNote();
+		home.navigateToNotesTab();
+
+		List<WebElement> noteTableRows = driver.findElements(By.xpath("//*[@id=\"userTable\"]/tbody/tr"));
+		assertTrue(noteTableRows.isEmpty());
 	}
 }

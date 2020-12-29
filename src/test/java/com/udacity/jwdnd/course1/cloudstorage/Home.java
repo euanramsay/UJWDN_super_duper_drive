@@ -31,6 +31,9 @@ public class Home {
     @FindBy(xpath = "//*[@id=\"note-row\"]/td[1]/button")
     private WebElement editFirstNoteButton;
 
+    @FindBy(xpath = "//*[@id=\"note-row\"]/td[1]/a")
+    private WebElement deleteFirstNoteButton;
+
     public Home(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -60,6 +63,12 @@ public class Home {
         this.noteDescriptionInput.sendKeys(additionToDescription);
         this.noteSaveChangesButton.click();
     }
+    public void deleteFirstNote() throws InterruptedException {
+        Thread.sleep(1000);
+        this.deleteFirstNoteButton.click();
+        Thread.sleep(1000);
+    }
+
 
     public void navigateToNotesTab() throws InterruptedException {
         Thread.sleep(1000);
