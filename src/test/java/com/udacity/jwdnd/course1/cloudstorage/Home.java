@@ -73,7 +73,7 @@ public class Home {
         this.navNotesTab.click();
         Thread.sleep(1000);
         this.addNoteButton.click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         this.noteTitleInput.sendKeys(title);
         this.noteDescriptionInput.sendKeys(description);
         this.noteSaveChangesButton.click();
@@ -84,7 +84,7 @@ public class Home {
         this.navCredentialsTab.click();
         Thread.sleep(1000);
         this.addCredentialButton.click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         this.credentialUrlInput.sendKeys(url);
         this.credentialUsernameInput.sendKeys(username);
         this.credentialPasswordInput.sendKeys(password);
@@ -94,7 +94,7 @@ public class Home {
     public void editFirstNote(String additionToTitle, String additionToDescription) throws InterruptedException {
         Thread.sleep(1000);
         this.editFirstNoteButton.click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         this.noteTitleInput.sendKeys(additionToTitle);
         this.noteDescriptionInput.sendKeys(additionToDescription);
         this.noteSaveChangesButton.click();

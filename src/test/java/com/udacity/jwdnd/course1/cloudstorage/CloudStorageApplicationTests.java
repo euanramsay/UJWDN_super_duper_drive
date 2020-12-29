@@ -22,7 +22,6 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private WebDriver driver;
-	private String username = "billg";
 	private String password = "password";
 	private String firstName = "Bill";
 	private String lastName = "Gates";
@@ -62,6 +61,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userCanAccessHomePageWhenLoggedInButNotWhenLoggedOut() throws InterruptedException {
+		String username = "username1";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -83,6 +84,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userCanCreateANote() throws InterruptedException {
+		String username = "username2";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -119,6 +122,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userCanEditAnExistingNote() throws InterruptedException {
+		String username = "username3";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -158,6 +163,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void deletedNoteIsNoLongerDisplayed() throws InterruptedException {
+		String username = "username4";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -193,6 +200,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userCanCreateACredential() throws InterruptedException {
+		String username = "username5";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -233,6 +242,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userCanEditAnExistingCredential() throws InterruptedException {
+		String username = "username6";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -281,6 +292,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void deletedCredentialIsNoLongerDisplayed() throws InterruptedException {
+		String username = "username7";
+
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
