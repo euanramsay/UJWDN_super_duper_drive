@@ -24,7 +24,7 @@ public class SignupController {
 
     @PostMapping("/signup")
     public String signupUser(@ModelAttribute User user, Model model) {
-        if( userService.isUserNameAvailable(user.getUsername())) {
+        if (userService.isUserNameAvailable(user.getUsername())) {
             Integer dbEntries = userService.createUser(user);
             if (dbEntries < 0) {
                 model.addAttribute("error", "There was a problem signing you up");
