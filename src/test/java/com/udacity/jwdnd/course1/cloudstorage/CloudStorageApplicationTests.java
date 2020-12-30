@@ -22,19 +22,14 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private WebDriver driver;
-	private String password = "password";
-	private String firstName = "Bill";
-	private String lastName = "Gates";
-	private String noteTitle = "Test title";
-	private String noteDescription = "Test description";
-	private String additionToNoteTitle = " edited";
-	private String additionToNoteDescription = " edited";
-	private String credentialUrl = "www.icloud.com";
-	private String credentialUsername = "credential";
-	private String credentialPassword = "password";
-	private String additionToUrl = "/mail";
-	private String additionToUsername = "24";
-	private String additionToPassword = "1";
+	private final String password = "password";
+	private final String firstName = "Bill";
+	private final String lastName = "Gates";
+	private final String noteTitle = "Test title";
+	private final String noteDescription = "Test description";
+	private final String credentialUrl = "www.icloud.com";
+	private final String credentialUsername = "credential";
+	private final String credentialPassword = "password";
 
 	@BeforeAll
 	static void beforeAll() {
@@ -150,6 +145,8 @@ class CloudStorageApplicationTests {
 		assertEquals(noteTitle, driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText());
 		assertEquals(noteDescription, driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText());
 
+		String additionToNoteTitle = " edited";
+		String additionToNoteDescription = " edited";
 		home.editFirstNote(additionToNoteTitle, additionToNoteDescription);
 
 		result.continueToHomePage();
@@ -192,6 +189,7 @@ class CloudStorageApplicationTests {
 		assertEquals(noteDescription, driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText());
 
 		home.deleteFirstNote();
+		result.continueToHomePage();
 		home.navigateToNotesTab();
 
 		List<WebElement> noteTableRows = driver.findElements(By.xpath("//*[@id=\"userTable\"]/tbody/tr"));
@@ -277,6 +275,9 @@ class CloudStorageApplicationTests {
 		// Password shown in modal is unencrypted
 		assertEquals(credentialPassword, driver.findElement(By.id("credential-password")).getAttribute("value"));
 
+		String additionToUrl = "/mail";
+		String additionToUsername = "24";
+		String additionToPassword = "1";
 		home.editFirstCredential(additionToUrl, additionToUsername, additionToPassword);
 
 		result.continueToHomePage();
@@ -323,6 +324,7 @@ class CloudStorageApplicationTests {
 		assertNotEquals(credentialPassword, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[3]")).getText());
 
 		home.deleteFirstCredential();
+		result.continueToHomePage();
 		home.navigateToCredentialsTab();
 
 		List<WebElement> credentialTableRows = driver.findElements(By.xpath("//*[@id=\"credentialTable\"]/tbody/tr"));

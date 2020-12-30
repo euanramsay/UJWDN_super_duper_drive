@@ -61,9 +61,15 @@ public class HomeController {
     }
 
     @GetMapping("/note/delete/{noteId}")
-    public String deleteNote(Authentication authentication, @PathVariable Integer noteId) {
-        noteService.deleteNote(noteId, getUserId(authentication));
-        return "redirect:/home";
+    public String deleteNote(Authentication authentication, @PathVariable Integer noteId, RedirectAttributes redirect) {
+        if (noteId == null) {
+            redirect.addAttribute("error", true);
+        } else {
+            if (noteService.deleteNote(noteId, getUserId(authentication)) == 1) {
+                redirect.addAttribute("success", true);
+            }
+        }
+        return "redirect:/result";
     }
 
     @PostMapping("/credential/create")
@@ -81,9 +87,15 @@ public class HomeController {
     }
 
     @GetMapping("/credential/delete/{credentialId}")
-    public String deleteCredential(Authentication authentication, @PathVariable Integer credentialId) {
-        credentialService.deleteCredential(credentialId, getUserId(authentication));
-        return "redirect:/home";
+    public String deleteCredential(Authentication authentication, @PathVariable Integer credentialId, RedirectAttributes redirect) {
+        if (credentialId == null) {
+            redirect.addAttribute("error", true);
+        } else {
+            if (credentialService.deleteCredential(credentialId, getUserId(authentication)) == 1) {
+                redirect.addAttribute("success", true);
+            }
+        }
+        return "redirect:/result";
     }
 
     @PostMapping("/file/upload")
@@ -111,9 +123,15 @@ public class HomeController {
     }
 
     @GetMapping("/file/delete/{fileId}")
-    public String deleteFile(Authentication authentication, @PathVariable Integer fileId) {
-        fileService.deleteFile(fileId, getUserId(authentication));
-        return "redirect:/home";
+    public String deleteFile(Authentication authentication, @PathVariable Integer fileId, RedirectAttributes redirect) {
+        if (fileId == null) {
+            redirect.addAttribute("error", true);
+        } else {
+            if (fileService.deleteFile(fileId, getUserId(authentication)) == 1) {
+                redirect.addAttribute("success", true);
+            }
+        }
+        return "redirect:/result";
     }
 
     private Integer getUserId(Authentication authentication) {
