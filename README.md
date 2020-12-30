@@ -23,3 +23,25 @@ The H2 database can be accessed at http://localhost:8080/h2-console
 ## Testing
 
 The application has a suite of Selenium tests run from the CloudStorageApplicationTests class.
+
+### References
+
+As well as the material in Spring Boot Basics unit of the Udacity Java Web Developer Nanodegree I also referred to the following sources:
+
+https://knowledge.udacity.com
+
+https://www.baeldung.com/junit-5-test-order
+
+https://www.baeldung.com/spring-request-param
+
+https://www.baeldung.com/spring-thymeleaf-path-variables
+
+https://www.baeldung.com/spring-thymeleaf-conditionals
+
+https://stackoverflow.com/questions/21824012/spring-modelattribute-vs-requestbody
+
+https://www.selenium.dev/documentation/en
+
+https://spring.io/guides/gs/securing-web
+
+
