@@ -95,6 +95,10 @@ public class HomeController {
 
     @PostMapping("/file/upload")
     public String uploadFile(Authentication authentication, @RequestParam MultipartFile fileUpload, RedirectAttributes redirect) {
+        if (fileUpload.isEmpty()) {
+            redirect.addAttribute("fileError", "Select file to upload");
+            return "redirect:/result";
+        }
         if (fileService.filenameUnique(fileUpload, getUserId(authentication))) {
             try {
                 fileService.uploadFile(fileUpload,getUserId(authentication));

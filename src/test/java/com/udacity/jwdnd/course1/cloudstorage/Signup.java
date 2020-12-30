@@ -36,10 +36,4 @@ public class Signup {
         this.inputPassword.sendKeys(password);
         this.submitButton.click();
     }
-
-    public void clickLoginLink() throws InterruptedException {
-        Thread.sleep(1000);
-        this.loginLink.click();
-        Thread.sleep(1000);
-    }
 }

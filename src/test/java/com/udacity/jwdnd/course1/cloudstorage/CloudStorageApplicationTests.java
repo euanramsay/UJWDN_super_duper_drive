@@ -59,6 +59,7 @@ class CloudStorageApplicationTests {
 	@Order(1)
 	public void userCanNotAccessHomePageWhenLoggedOutTest() {
 		driver.get("http://localhost:" + this.port + "/home");
+
 		assertEquals("Login", driver.getTitle());
 	}
 
@@ -66,11 +67,10 @@ class CloudStorageApplicationTests {
 	@Order(2)
 	public void userCanAccessHomePageWhenLoggedInButNotWhenLoggedOutTest() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/signup");
-
 		Signup signup = new Signup(driver);
 		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("inputUsername")));
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
@@ -78,7 +78,6 @@ class CloudStorageApplicationTests {
 
 		Home home = new Home(driver);
 		home.logoutUser();
-
 		driver.get("http://localhost:" + this.port + "/home");
 
 		assertEquals("Login", driver.getTitle());
