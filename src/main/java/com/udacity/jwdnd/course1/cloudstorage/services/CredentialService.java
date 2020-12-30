@@ -27,10 +27,6 @@ public class CredentialService {
         return credentials.stream().map(this::decryptPassword).collect(Collectors.toList());
     }
 
-    public Credential getCredential(Integer credentialId){
-        return credentialMapper.getCredential(credentialId);
-    }
-
     public Integer addCredential(Credential credential, Integer userId){
         encryptPassword(credential);
         credential.setUserId(userId);
