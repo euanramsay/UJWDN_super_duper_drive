@@ -16,20 +16,27 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
 	private int port;
 
 	private WebDriver driver;
+	private final String username = "username";
 	private final String password = "password";
 	private final String firstName = "Bill";
 	private final String lastName = "Gates";
 	private final String noteTitle = "Test title";
 	private final String noteDescription = "Test description";
+	private final String additionToNoteTitle = " edited";
+	private final String additionToNoteDescription = " edited";
 	private final String credentialUrl = "www.icloud.com";
 	private final String credentialUsername = "credential";
 	private final String credentialPassword = "password";
+	private final String additionToUrl = "/mail";
+	private final String additionToUsername = "24";
+	private final String additionToPassword = "1";
 
 	@BeforeAll
 	static void beforeAll() {
@@ -49,15 +56,15 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userCanNotAccessHomePageWhenLoggedOut() {
+	@Order(1)
+	public void userCanNotAccessHomePageWhenLoggedOutTest() {
 		driver.get("http://localhost:" + this.port + "/home");
 		assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
-	public void userCanAccessHomePageWhenLoggedInButNotWhenLoggedOut() throws InterruptedException {
-		String username = "username1";
-
+	@Order(2)
+	public void userCanAccessHomePageWhenLoggedInButNotWhenLoggedOutTest() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/signup");
 
 		Signup signup = new Signup(driver);
@@ -78,15 +85,9 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userCanCreateANote() throws InterruptedException {
-		String username = "username2";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(3)
+	public void userCanCreateANoteTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
@@ -100,10 +101,8 @@ class CloudStorageApplicationTests {
 		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToNotesTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-row")));
-
 		WebElement editButton = driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[1]/button"));
 		WebElement deleteButton = driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[1]/a"));
 		WebElement noteRowTitle = driver.findElement(By.xpath("//*[@id=\"note-row\"]/th"));
@@ -116,42 +115,26 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userCanEditAnExistingNote() throws InterruptedException {
-		String username = "username3";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(4)
+	public void userCanEditAnExistingNoteTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
 		assertEquals("Home", driver.getTitle());
 
 		Home home = new Home(driver);
-		home.addNewNote(noteTitle, noteDescription);
-
-		assertEquals("Result", driver.getTitle());
-
-		Result result = new Result(driver);
-		result.continueToHomePage();
 		home.navigateToNotesTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-row")));
 
 		assertEquals(noteTitle, driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText());
 		assertEquals(noteDescription, driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText());
 
-		String additionToNoteTitle = " edited";
-		String additionToNoteDescription = " edited";
 		home.editFirstNote(additionToNoteTitle, additionToNoteDescription);
-
+		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToNotesTab();
-
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-row")));
 
 		assertEquals(noteTitle + additionToNoteTitle, driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText());
@@ -159,53 +142,35 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void deletedNoteIsNoLongerDisplayed() throws InterruptedException {
-		String username = "username4";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(5)
+	public void deletedNoteIsNoLongerDisplayedTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
 		assertEquals("Home", driver.getTitle());
 
 		Home home = new Home(driver);
-		home.addNewNote(noteTitle, noteDescription);
-
-		assertEquals("Result", driver.getTitle());
-
-		Result result = new Result(driver);
-		result.continueToHomePage();
 		home.navigateToNotesTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-row")));
 
-		assertEquals(noteTitle, driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText());
-		assertEquals(noteDescription, driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText());
+		assertEquals(noteTitle + additionToNoteTitle, driver.findElement(By.xpath("//*[@id=\"note-row\"]/th")).getText());
+		assertEquals(noteDescription + additionToNoteDescription, driver.findElement(By.xpath("//*[@id=\"note-row\"]/td[2]")).getText());
 
 		home.deleteFirstNote();
+		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToNotesTab();
-
 		List<WebElement> noteTableRows = driver.findElements(By.xpath("//*[@id=\"userTable\"]/tbody/tr"));
+
 		assertTrue(noteTableRows.isEmpty());
 	}
 
 	@Test
-	public void userCanCreateACredential() throws InterruptedException {
-		String username = "username5";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(6)
+	public void userCanCreateACredentialTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
@@ -219,10 +184,8 @@ class CloudStorageApplicationTests {
 		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToCredentialsTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("credential-row")));
-
 		WebElement editButton = driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[1]/button"));
 		WebElement deleteButton = driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[1]/a"));
 		WebElement credentialRowUrl = driver.findElement(By.xpath("//*[@id=\"credential-row\"]/th"));
@@ -239,29 +202,16 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userCanEditAnExistingCredential() throws InterruptedException {
-		String username = "username6";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(7)
+	public void userCanEditAnExistingCredentialTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
 		assertEquals("Home", driver.getTitle());
 
 		Home home = new Home(driver);
-		home.addNewCredential(credentialUrl, credentialUsername, credentialPassword);
-
-		assertEquals("Result", driver.getTitle());
-
-		Result result = new Result(driver);
-		result.continueToHomePage();
 		home.navigateToCredentialsTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("credential-row")));
 
@@ -275,14 +225,10 @@ class CloudStorageApplicationTests {
 		// Password shown in modal is unencrypted
 		assertEquals(credentialPassword, driver.findElement(By.id("credential-password")).getAttribute("value"));
 
-		String additionToUrl = "/mail";
-		String additionToUsername = "24";
-		String additionToPassword = "1";
 		home.editFirstCredential(additionToUrl, additionToUsername, additionToPassword);
-
+		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToCredentialsTab();
-
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("credential-row")));
 
 		assertEquals(credentialUrl + additionToUrl, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/th")).getText());
@@ -292,42 +238,30 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void deletedCredentialIsNoLongerDisplayed() throws InterruptedException {
-		String username = "username7";
-
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		Signup signup = new Signup(driver);
-		signup.signupUser(firstName, lastName, username, password);
-		signup.clickLoginLink();
-
+	@Order(8)
+	public void deletedCredentialIsNoLongerDisplayedTest() throws InterruptedException {
+		driver.get("http://localhost:" + this.port + "/login");
 		Login login = new Login(driver);
 		login.loginUser(username, password);
 
 		assertEquals("Home", driver.getTitle());
 
 		Home home = new Home(driver);
-		home.addNewCredential(credentialUrl, credentialUsername, credentialPassword);
-
-		assertEquals("Result", driver.getTitle());
-
-		Result result = new Result(driver);
-		result.continueToHomePage();
 		home.navigateToCredentialsTab();
-
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("credential-row")));
 
-		assertEquals(credentialUrl, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/th")).getText());
-		assertEquals(credentialUsername, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[2]")).getText());
+		assertEquals(credentialUrl + additionToUrl, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/th")).getText());
+		assertEquals(credentialUsername + additionToUsername, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[2]")).getText());
 		// Password shown in list is encrypted
-		assertNotEquals(credentialPassword, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[3]")).getText());
+		assertNotEquals(credentialPassword + additionToPassword, driver.findElement(By.xpath("//*[@id=\"credential-row\"]/td[3]")).getText());
 
 		home.deleteFirstCredential();
+		Result result = new Result(driver);
 		result.continueToHomePage();
 		home.navigateToCredentialsTab();
-
 		List<WebElement> credentialTableRows = driver.findElements(By.xpath("//*[@id=\"credentialTable\"]/tbody/tr"));
+
 		assertTrue(credentialTableRows.isEmpty());
 	}
 }
